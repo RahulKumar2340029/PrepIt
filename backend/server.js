@@ -5,6 +5,7 @@ const path = require('path')
 const connectDB = require("./config/db")
 const authRoutes = require('./routes/auth.routes')
 const sessionRoutes = require('./routes/session.routes')
+const questionRoutes = require('./routes/question.routes')
 const app = express()
 
 // Middleware to handle cors
@@ -27,7 +28,7 @@ app.use(express.json())
 // Roytes
 app.use("/api/auth",authRoutes)
 app.use("/api/sessions",sessionRoutes)
-// app.use("/api/questions",questionRoutes)
+app.use("/api/questions",questionRoutes)
 
 // app.use("api/ai/generate-questions",protect,generateInterviewQuestions)
 // app.use("/api/ai/generate-explanation",protect,generateConceptExplanation)
