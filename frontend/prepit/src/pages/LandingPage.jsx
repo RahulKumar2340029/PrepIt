@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import HERO_BG from '../assets/prepit.png'
 import { APP_FEATURES } from '../utils/data'
 import SignUp from '../pages/Auth/Signup'
@@ -7,14 +7,24 @@ import SignUp from '../pages/Auth/Signup'
 import Login from '../pages/Auth/Login'
 import { useNavigate } from 'react-router-dom'
 
-import {LuSparkles} from 'react-icons/lu'
+import { LuSparkles } from 'react-icons/lu'
 import Modal from '../components/Modal'
+import { UserContext } from '../context/userContext'
+import ProfileInfoCard from '../components/Cards/ProfileInfoCard'
+
 const LandingPage = () => {
+  const { user } = useContext(UserContext)
   const navigate = useNavigate()
 
   const [openAuthModel, setOpenAuthModel] = useState(false)
   const [currentPage, setCurrentPage] = useState("login")
-  const handleCTA = () => { }
+  const handleCTA = () => {
+    if (!user) {
+      setOpenAuthModel(true)
+    } else {
+      navigate('/dashboard')
+    }
+  }
   return (
     <>
       <div className='w-full min-h-full bg-[#FFFCEF] pb-1'>
@@ -24,13 +34,13 @@ const LandingPage = () => {
             <div className='text-xl text-black font-bold'>
               PrepIt
             </div>
-            <button className='bg-linear-to-r from-[#FF9324] to-[#e99a4b] font-semibold text-white px-7 py-2.5 rounded-full hover:bg-black
+            {user ? (<ProfileInfoCard />) : (<button className='bg-linear-to-r from-[#FF9324] to-[#e99a4b] font-semibold text-white px-7 py-2.5 rounded-full hover:bg-black
            hover:text-white border border-white transition-colors cursor-pointer mt-7'
               onClick={() => { setOpenAuthModel(true) }}
             >
               Login/ Sign Up
 
-            </button>
+            </button>)}
           </header>
 
           {/* Hero Content */}
@@ -39,8 +49,8 @@ const LandingPage = () => {
             <div className="w-full md:w-1/2 pr-4 mb-8 md:mb-0">
               <div className="flex items-center justify-left mb-2">
                 <div className="flex items-center gap-2 text-[13px] text-amber-600 font-semibold bg-amber-100 px-3 rounded-full border border-amber-300">
-                  
-                 <LuSparkles /> AI Powered
+
+                  <LuSparkles /> AI Powered
                 </div>
               </div>
 
@@ -70,7 +80,7 @@ const LandingPage = () => {
         <div>
           <section className='flex items-center justify-center -mt-36'>
             <img src={HERO_BG} alt="Hero Image"
-            className='w-[80vw] rounded-lg'
+              className='w-[80vw] rounded-lg'
             />
           </section>
         </div>
@@ -84,59 +94,59 @@ const LandingPage = () => {
 
               <div className="flex flex-col items-center gap-8">
                 <div className='grid grid-cols-1 md:grid-cols-3 gap-8 w-full'>
-                {APP_FEATURES.slice(0,3).map((feature)=>(
-                  <div  
+                  {APP_FEATURES.slice(0, 3).map((feature) => (
+                    <div
                       key={feature.id}
                       className='bg-[#FFFEF8] p-6 rounded-xl shadow-xs hover:shadow-lg shadow-amber-100 transition border
                       border-amber-100'
-                  >
-                    <h3 className="text-base font-semibold mb-3">
-                      {feature.title}
-                    </h3>
-                    <p className="text-gray-600">{feature.description}</p>
-                  </div>
-                ))}
+                    >
+                      <h3 className="text-base font-semibold mb-3">
+                        {feature.title}
+                      </h3>
+                      <p className="text-gray-600">{feature.description}</p>
+                    </div>
+                  ))}
                 </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                {APP_FEATURES.slice(3).map((feature)=>(
-                  <div
-                  key={feature.id}
-                  className="bg-[#FFFEF8] p-6 rounded-xl shadow-xl hover:shadow-lg shadow-amber-100 transition border border-amber-100">
-                    <h3 className='text-base font-semibold mb-3'>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                  {APP_FEATURES.slice(3).map((feature) => (
+                    <div
+                      key={feature.id}
+                      className="bg-[#FFFEF8] p-6 rounded-xl shadow-xl hover:shadow-lg shadow-amber-100 transition border border-amber-100">
+                      <h3 className='text-base font-semibold mb-3'>
 
-                      {feature.title}
-                    </h3>
-                    <p className='text-gray-600'>{feature.description}</p>
-                  </div>
-                ))}
-              </div>
+                        {feature.title}
+                      </h3>
+                      <p className='text-gray-600'>{feature.description}</p>
+                    </div>
+                  ))}
+                </div>
               </div>
             </section>
           </div>
         </div>
         <div className='text-sm bg-gray-50 text-secondary text-center p-5 mt-5'>
-            Made with ❤️... Happy Coding
+          Made with ❤️... Happy Coding
         </div>
       </div>
 
       <Modal
         isOpen={openAuthModel}
-        onClose ={()=>{
+        onClose={() => {
           setOpenAuthModel(false);
           setCurrentPage("login")
         }}
         hideHeader
-        >
-          <div>
-            {currentPage === "login" && (
-              <Login setCurrentPage={setCurrentPage} />
-            )}
-            {currentPage === "signup" && (
-              <SignUp setCurrentPage={setCurrentPage} />
-            )}
-          </div>
-        </Modal>
+      >
+        <div>
+          {currentPage === "login" && (
+            <Login setCurrentPage={setCurrentPage} />
+          )}
+          {currentPage === "signup" && (
+            <SignUp setCurrentPage={setCurrentPage} />
+          )}
+        </div>
+      </Modal>
 
     </>
   )
